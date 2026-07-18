@@ -117,7 +117,7 @@ Example:
 
 ```env
 APP_NAME="Electronics Store"
-APP_URL=http://localhost
+APP_URL=[http://localhost](http://127.0.0.1:8000)
 ```
 
 ### 4. Generate Application Key
