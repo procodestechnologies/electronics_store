@@ -1,0 +1,125 @@
+<?php
+
+use Livewire\Component;
+
+new class extends Component {
+    //
+};
+?>
+
+<div class="container-fluid nav-bar p-0">
+    <div class="row gx-0 bg-primary px-5 align-items-center">
+        <div class="col-lg-3 d-none d-lg-block">
+            <nav class="navbar navbar-light text-light position-relative" style="width: 250px;">
+                <button class="navbar-toggler border-0 fs-4 w-100 px-0 text-start" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#allCat">
+                    <h4 class="m-0"><i class="fa fa-bars me-2"></i style="color: #fff !important;">All Categories</h4>
+                </button>
+                <div class="collapse navbar-collapse rounded-bottom text-white" id="allCat">
+                    <div class="navbar-nav ms-auto py-0">
+                        <ul class="list-unstyled categories-bars">
+                            <li>
+                                <div class="categories-bars-item">
+                                    <a href="#">Accessories</a>
+                                    <span>(3)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="categories-bars-item">
+                                    <a href="#">Electronics & Computer</a>
+                                    <span>(5)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="categories-bars-item">
+                                    <a href="#">Laptops & Desktops</a>
+                                    <span>(2)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="categories-bars-item">
+                                    <a href="#">Mobiles & Tablets</a>
+                                    <span>(8)</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="categories-bars-item">
+                                    <a href="#">SmartPhone & Smart TV</a>
+                                    <span>(5)</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-12 col-lg-9">
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
+                <a href="" class="navbar-brand d-block d-lg-none">
+                    <h1 class="display-5 text-secondary m-0"><i class="fas fa-shopping-bag text-white me-2"></i>{{ config('app.name') }}
+                    </h1>
+                    <!-- <img src="img/logo.png" alt="Logo"> -->
+                </a>
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars fa-1x"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0">
+                        <a href="{{ route('home') }}"
+                            class="nav-item nav-link @if (request()->routeIs('home')) active @endif">Home</a>
+                        <a href="{{ route('shop') }}"
+                            class="nav-item nav-link @if (request()->routeIs('shop')) active @endif">Shop</a>
+                        <a href="{{ route('cart') }}"
+                            class="nav-item nav-link @if (request()->routeIs('cart')) active @endif">Cart</a>
+                        <a href="{{ route('checkout') }}"
+                            class="nav-item nav-link @if (request()->routeIs('checkout')) active @endif">Checkout</a>
+                        <a href="{{ route('contact') }}"
+                            class="nav-item nav-link @if (request()->routeIs('contact')) active @endif me-2">Contact</a>
+
+                        <div class="nav-item dropdown d-block d-lg-none mb-3">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">All
+                                Category</a>
+                            <div class="dropdown-menu m-0">
+                                <ul class="list-unstyled categories-bars">
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="#">Accessories</a>
+                                            <span>(3)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="#">Electronics & Computer</a>
+                                            <span>(5)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="#">Laptops & Desktops</a>
+                                            <span>(2)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="#">Mobiles & Tablets</a>
+                                            <span>(8)</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="categories-bars-item">
+                                            <a href="#">SmartPhone & Smart TV</a>
+                                            <span>(5)</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
+                            class="fa fa-mobile-alt me-2"></i> +254 759 900 802</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
