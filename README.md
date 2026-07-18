@@ -23,7 +23,7 @@ This project is designed to provide an easy-to-use platform for selling electron
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url> electronics_store
+   git clone [<repository-url>](https://github.com/procodestechnologies/electronics_store) electronics_store
    cd electronics_store
    ```
 2. Install dependencies and configure your environment.
