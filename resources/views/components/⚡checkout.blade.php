@@ -3,7 +3,19 @@
 use Livewire\Component;
 
 new class extends Component {
-    //
+    public function cartItems()
+    {
+        return session()->get('cart', []);
+    }
+    public function totalPrice()
+    {
+        $cart = session()->get('cart', []);
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+        return $total;
+    }
 };
 ?>
 
@@ -55,18 +67,19 @@ new class extends Component {
                         <label class="form-label my-3">Email Address<sup>*</sup></label>
                         <input type="email" class="form-control">
                     </div>
-                    <div class="form-check my-3">
+                    {{-- <div class="form-check my-3">
                         <input type="checkbox" class="form-check-input" id="Account-1" name="Accounts" value="Accounts">
                         <label class="form-check-label" for="Account-1">Create an account?</label>
-                    </div>
+                    </div> --}}
                     <hr>
+                    {{-- 
                     <div class="form-check my-3">
                         <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address">
                         <label class="form-check-label" for="Address-1">Ship to a different address?</label>
-                    </div>
+                    </div> --}}
                     <div class="form-item">
                         <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11"
-                            placeholder="Oreder Notes (Optional)"></textarea>
+                            placeholder="Order Notes (Optional)"></textarea>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6 col-xl-6 wow fadeInUp" data-wow-delay="0.3s">
@@ -74,59 +87,37 @@ new class extends Component {
                         <table class="table">
                             <thead>
                                 <tr class="text-center">
+                                    <th scope="col">Image</th>
                                     <th scope="col" class="text-start">Name</th>
-                                    <th scope="col">Model</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="text-center">
-                                    <th scope="row" class="text-start py-4">
-                                        Apple iPad Mini
-                                    </th>
-                                    <td class="py-4">G2356</td>
-                                    <td class="py-4">$269.00</td>
-                                    <td class="py-4 text-center">2</td>
-                                    <td class="py-4">$538.00</td>
-                                </tr>
-                                <tr class="text-center">
-                                    <th scope="row" class="text-start py-4">
-                                        Apple iPad Mini
-                                    </th>
-                                    <td class="py-4">G2356</td>
-                                    <td class="py-4">$269.00</td>
-                                    <td class="py-4">2</td>
-                                    <td class="py-4">$538.00</td>
-                                </tr>
-                                <tr class="text-center">
-                                    <th scope="row" class="text-start py-4">
-                                        Apple iPad Mini
-                                    </th>
-                                    <td class="py-4">G2356</td>
-                                    <td class="py-4">$269.00</td>
-                                    <td class="py-4">2</td>
-                                    <td class="py-4">$538.00</td>
-                                </tr>
-                                <tr class="text-center">
-                                    <th scope="row" class="text-start py-4">
-                                        Apple iPad Mini
-                                    </th>
-                                    <td class="py-4">G2356</td>
-                                    <td class="py-4">$269.00</td>
-                                    <td class="py-4">2</td>
-                                    <td class="py-4">$538.00</td>
-                                </tr>
-                                <tr class="text-center">
-                                    <th scope="row" class="text-start py-4">
-                                        Apple iPad Mini
-                                    </th>
-                                    <td class="py-4">G2356</td>
-                                    <td class="py-4">$269.00</td>
-                                    <td class="py-4">2</td>
-                                    <td class="py-4">$538.00</td>
-                                </tr>
+                                @forelse ($this->cartItems() as $item)
+                                    <tr class="text-center">
+                                        <th scope="row" class="text-start py-4">
+                                            <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}"
+                                                class="img-fluid rounded" style="width: 60px; height: 60px;">
+                                        </th>
+                                        <td class="py-4 text-start">{{ $item['name'] }}</td>
+                                        <td class="py-4">Kshs. {{ number_format($item['price'], 2) }}</td>
+                                        <td class="py-4 text-center">{{ $item['quantity'] }}</td>
+                                        <td class="py-4">Kshs.
+                                            {{ number_format($item['price'] * $item['quantity'], 2) }}
+                                        </td>
+                                    </tr>
+
+                                @empty
+                                    <tr class="text-center">
+                                        <td colspan="5" class="text-center py-4 justify-content-between">Your cart is
+                                            empty.
+                                        </td>
+                                    </tr>
+                                @endforelse
+
+
                                 <tr>
                                     <th scope="row">
                                     </th>
@@ -137,32 +128,7 @@ new class extends Component {
                                     </td>
                                     <td class="py-4">
                                         <div class="py-2 text-center border-bottom border-top">
-                                            <p class="mb-0 text-dark">$1134.00</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                    </th>
-                                    <td class="py-4">
-                                        <p class="mb-0 text-dark py-4">Shipping</p>
-                                    </td>
-                                    <td colspan="3" class="py-4">
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                id="Shipping-1" name="Shipping-1" value="Shipping">
-                                            <label class="form-check-label" for="Shipping-1">Free Shipping</label>
-                                        </div>
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                id="Shipping-2" name="Shipping-1" value="Shipping">
-                                            <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
-                                        </div>
-                                        <div class="form-check text-start">
-                                            <input type="checkbox" class="form-check-input bg-primary border-0"
-                                                id="Shipping-3" name="Shipping-1" value="Shipping">
-                                            <label class="form-check-label" for="Shipping-3">Local Pickup:
-                                                $8.00</label>
+                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -176,51 +142,12 @@ new class extends Component {
                                     <td class="py-4"></td>
                                     <td class="py-4">
                                         <div class="py-2 text-center border-bottom border-top">
-                                            <p class="mb-0 text-dark">$135.00</p>
+                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}</p>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="row g-0 text-center align-items-center justify-content-center border-bottom py-2">
-                        <div class="col-12">
-                            <div class="form-check text-start my-2">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1"
-                                    name="Transfer" value="Transfer">
-                                <label class="form-check-label" for="Transfer-1">Direct Bank Transfer</label>
-                            </div>
-                            <p class="text-start text-dark">Make your payment directly into our bank account. Please
-                                use your Order ID as the payment reference. Your order will not be shipped until the
-                                funds have cleared in our account.</p>
-                        </div>
-                    </div>
-                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-2">
-                        <div class="col-12">
-                            <div class="form-check text-start my-2">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1"
-                                    name="Payments" value="Payments">
-                                <label class="form-check-label" for="Payments-1">Check Payments</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-2">
-                        <div class="col-12">
-                            <div class="form-check text-start my-2">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1"
-                                    name="Delivery" value="Delivery">
-                                <label class="form-check-label" for="Delivery-1">Cash On Delivery</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-2">
-                        <div class="col-12">
-                            <div class="form-check text-start my-2">
-                                <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1"
-                                    name="Paypal" value="Paypal">
-                                <label class="form-check-label" for="Paypal-1">Paypal</label>
-                            </div>
-                        </div>
                     </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                         <button type="button"

@@ -22,7 +22,7 @@ new class extends Component {
         if (isset($cart[$productId])) {
             unset($cart[$productId]);
             session()->put('cart', $cart);
-            self::dispatch('cartUpdated', message: 'Item removed from cart!');
+            $this->dispatch('cartUpdated', message: 'Item removed from cart!');
         }
     }
     public function updateQuantity($productId, $quantity)
@@ -30,13 +30,13 @@ new class extends Component {
         $cart = session()->get('cart', []);
         // if quantity is less than 1, remove the item from the cart
         if ($quantity < 1) {
-            self::removeFromCart($productId);
+            $this->removeFromCart($productId);
             return;
         }
         if (isset($cart[$productId])) {
             $cart[$productId]['quantity'] = $quantity;
             session()->put('cart', $cart);
-            self::dispatch('cartUpdated', message: 'Cart updated!');
+            $this->dispatch('cartUpdated', message: 'Cart updated!');
         }
     }
     public function cartTotal()
@@ -110,9 +110,7 @@ new class extends Component {
                         </tr>
                     @empty
                         <tr class="text-center">
-                            <td colspan="6" class="text-center py-4 justify-content-between">Your cart is empty. <a
-                                    href="{{ route('shop') }}"
-                                    class="btn btn-primary rounded-pill px-4 py-3 text-uppercase">Continue Shopping</a>
+                            <td colspan="6" class="text-center py-4 justify-content-between">Your cart is empty.
                             </td>
                         </tr>
                     @endforelse
@@ -121,10 +119,10 @@ new class extends Component {
                 </tbody>
             </table>
         </div>
-        <div class="mt-5">
+        {{-- <div class="mt-5">
             <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
             <button class="btn btn-primary rounded-pill px-4 py-3" type="button">Apply Coupon</button>
-        </div>
+        </div> --}}
         <div class="row g-4 justify-content-end">
             <div class="col-8"></div>
             <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
@@ -147,8 +145,15 @@ new class extends Component {
                         <h5 class="mb-0 ps-4 me-4">Total</h5>
                         <p class="mb-0 pe-4">Kshs. {{ number_format($this->cartTotal(), 2) }}</p>
                     </div>
-                    <button class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
-                        type="button">Proceed Checkout</button>
+                    @if (count($this->cartItems()) > 0)
+                        <a class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4"
+                           href="{{ route('checkout') }}">Proceed Checkout</a>
+                    @else
+                        <a href="{{ route('shop') }}"
+                            class="btn btn-primary rounded-pill px-4 py-3 text-uppercase mb-4 ms-4">Continue
+                            Shopping</a>
+                    @endif
+
                 </div>
             </div>
         </div>

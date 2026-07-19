@@ -24,7 +24,7 @@ new class extends Component {
                 'image' => $product->featuredImage->image_path, // Assuming you have a relationship to get the featured image
             ];
         }
-        self::dispatch('cartUpdated', message: ucfirst(strtolower($product->name)) . ' added to cart!');
+        $this->dispatch('cartUpdated', message: ucfirst(strtolower($product->name)) . ' added to cart!');
         session()->put('cart', $cart);
     }
 };

@@ -56,8 +56,16 @@ class User extends Authenticatable implements PasskeyUser
         $initials = Str::initials($this->name, true);
 
         return Str::length($initials) > 1
-            ? Str::substr($initials, 0, 1).Str::substr($initials, -1)
+            ? Str::substr($initials, 0, 1) . Str::substr($initials, -1)
             : $initials;
+    }
+    public function firstname()
+    {
+        return Str::before($this->name, ' ');
+    }
+    public function lastname()
+    {
+        return Str::after($this->name, ' ');
     }
     public function products()
     {
