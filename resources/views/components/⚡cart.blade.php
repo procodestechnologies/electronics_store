@@ -22,7 +22,7 @@ new class extends Component {
         if (isset($cart[$productId])) {
             unset($cart[$productId]);
             session()->put('cart', $cart);
-            $this->dispatch('cartUpdated', message: 'Item removed from cart!');
+            self::dispatch('cartUpdated', message: 'Item removed from cart!');
         }
     }
     public function updateQuantity($productId, $quantity)
@@ -30,13 +30,13 @@ new class extends Component {
         $cart = session()->get('cart', []);
         // if quantity is less than 1, remove the item from the cart
         if ($quantity < 1) {
-            $this->removeFromCart($productId);
+            self::removeFromCart($productId);
             return;
         }
         if (isset($cart[$productId])) {
             $cart[$productId]['quantity'] = $quantity;
             session()->put('cart', $cart);
-            $this->dispatch('cartUpdated', message: 'Cart updated!');
+            self::dispatch('cartUpdated', message: 'Cart updated!');
         }
     }
     public function cartTotal()

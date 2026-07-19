@@ -36,8 +36,8 @@ new class extends Component {
                     <flux:table.cell>Kshs. {{ $product->price }}</flux:table.cell>
                     <flux:table.cell>
 
-                        <flux:button icon="pencil-square" href="{{ route('admin.products.show', $product->id) }}"
-                            wire:navigate variant="primary" color="emerald">
+                        <flux:button icon="eye" href="{{ route('admin.products.show', $product->id) }}"
+                            wire:navigate variant="primary" color="blue">
                             View
                         </flux:button>
                         <flux:button icon="pencil-square" href="{{ route('admin.products.edit', $product->id) }}"
