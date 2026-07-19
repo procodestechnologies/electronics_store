@@ -56,7 +56,8 @@ new class extends Component {
         <div class="col-12 col-lg-9">
             <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
                 <a href="" class="navbar-brand d-block d-lg-none">
-                    <h1 class="display-5 text-secondary m-0"><i class="fas fa-shopping-bag text-white me-2"></i>{{ config('app.name') }}
+                    <h1 class="display-5 text-secondary m-0"><i
+                            class="fas fa-shopping-bag text-white me-2"></i>{{ config('app.name') }}
                     </h1>
                     <!-- <img src="img/logo.png" alt="Logo"> -->
                 </a>
@@ -67,15 +68,15 @@ new class extends Component {
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <a href="{{ route('home') }}"
-                            class="nav-item nav-link @if (request()->routeIs('home')) active @endif">Home</a>
+                            class="nav-item nav-link @if (request()->routeIs('home')) active @endif wire:navigate">Home</a>
                         <a href="{{ route('shop') }}"
-                            class="nav-item nav-link @if (request()->routeIs('shop')) active @endif">Shop</a>
+                            class="nav-item nav-link @if (request()->routeIs('shop')) active @endif wire:navigate">Shop</a>
                         <a href="{{ route('cart') }}"
-                            class="nav-item nav-link @if (request()->routeIs('cart')) active @endif">Cart</a>
+                            class="nav-item nav-link @if (request()->routeIs('cart')) active @endif wire:navigate">Cart</a>
                         <a href="{{ route('checkout') }}"
-                            class="nav-item nav-link @if (request()->routeIs('checkout')) active @endif">Checkout</a>
+                            class="nav-item nav-link @if (request()->routeIs('checkout')) active @endif wire:navigate">Checkout</a>
                         <a href="{{ route('contact') }}"
-                            class="nav-item nav-link @if (request()->routeIs('contact')) active @endif me-2">Contact</a>
+                            class="nav-item nav-link @if (request()->routeIs('contact')) active @endif wire:navigate me-2">Contact</a>
 
                         <div class="nav-item dropdown d-block d-lg-none mb-3">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">All

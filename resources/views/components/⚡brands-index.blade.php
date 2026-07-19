@@ -20,12 +20,12 @@ new class extends Component {
 };
 ?>
 
-<div class="grid grid-cols-4 gap-4">
+<div class="grid  grid-cols-4 gap-2 md:grid-cols-3 sm:grid-cols-1">
     @php
         $colors = ['emerald', 'green',  'yellow', 'teal', 'indigo', 'purple', 'gray'];
     @endphp
     @foreach ($this->brands() as $index => $brand)
-        <flux:card class="bg-{{ $colors[$index % count($colors)] }}-500">
+        <flux:card class="bg-{{ $colors[$index % count($colors)] }}-500 w-fit">
             <flux:heading title="Brand 1" description="Description for Brand 1">
                 {{ $brand->name }}
             </flux:heading>
@@ -39,7 +39,7 @@ new class extends Component {
             </flux:text>
             {{-- action buttons --}}
             <flux:spacer class="mt-4" />
-            <div class="flex flex-row gap-2">
+            <div class="flex flex-row gap-2 w-fit">
                 <flux:button href="{{ route('brands.edit', $brand) }}" wire:navigate variant="primary">
                     Edit
                 </flux:button>

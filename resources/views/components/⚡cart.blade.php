@@ -3,7 +3,10 @@
 use Livewire\Component;
 
 new class extends Component {
-    //
+    public function cartItems()
+    {
+        return session()->get('cart', []);
+    }
 };
 ?>
 

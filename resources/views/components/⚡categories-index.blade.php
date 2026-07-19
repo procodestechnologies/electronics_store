@@ -19,7 +19,7 @@ new class extends Component {
 };
 ?>
 
-<div class="grid grid-cols-4 gap-4">
+<div class="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-1 gap-4">
     @php
         $colors = ['emerald', 'green', 'red', 'yellow', 'teal', 'indigo', 'purple', 'gray'];
     @endphp

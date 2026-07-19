@@ -34,6 +34,11 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
     Route::resource('/categories', CategoryController::class)->names(['categories']);
     Route::resource('/products', ProductController::class)->names('admin.products');
 });
+
+Route::get('clear-cart', function () {
+    // session()->forget('cart');
+    return session()->get('cart', []);
+})->name('clear-cart');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 });
