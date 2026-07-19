@@ -17,6 +17,7 @@ new class extends Component {
         } else {
             // Add new product to cart array
             $cart[$product->id] = [
+                'id' => $product->id,
                 'name' => $product->name,
                 'quantity' => 1,
                 'price' => $product->price,

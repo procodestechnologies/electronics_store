@@ -36,7 +36,7 @@ Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () 
 });
 
 Route::get('clear-cart', function () {
-    // session()->forget('cart');
+    session()->forget('cart');
     return session()->get('cart', []);
 })->name('clear-cart');
 Route::middleware(['auth', 'verified'])->group(function () {
