@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontendOrderTracking;
 use App\Http\Controllers\FrontendProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
@@ -25,15 +26,18 @@ Route::prefix('/')->group(function () {
     })->name('contact');
     Route::get('/search/{query}', [SearchController::class, 'index'])->name('search');
     Route::resource('products', FrontendProductController::class)->names(['products']);
+    Route::get('/track-order/{order_number}', [FrontendOrderTracking::class, 'index'])->name('track.order');
 });
-Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
-    Route::get('', function () {
-        return view('dashboard');
-    })->name('dashboard');
-    Route::resource('/brands', BrandController::class)->names(['brands']);
-    Route::resource('/categories', CategoryController::class)->names(['categories']);
-    Route::resource('/products', ProductController::class)->names('admin.products');
-});
+Route::prefix('dashboard')
+    ->middleware(['auth', 'verified'])
+    ->group(function () {
+        Route::get('', function () {
+            return view('dashboard');
+        })->name('dashboard');
+        Route::resource('/brands', BrandController::class)->names(['brands']);
+        Route::resource('/categories', CategoryController::class)->names(['categories']);
+        Route::resource('/products', ProductController::class)->names('admin.products');
+    });
 
 Route::get('clear-cart', function () {
     // session()->forget('cart');
@@ -42,6 +46,5 @@ Route::get('clear-cart', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 });
-
 
 require __DIR__ . '/settings.php';

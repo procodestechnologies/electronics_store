@@ -1,8 +1,26 @@
 <?php
 
+use App\Models\Order;
+use App\Models\Product;
+use Illuminate\Support\Str;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component {
+    #[Validate('required|string')]
+    public string $address;
+    #[Validate('required|string')]
+    public string $town;
+    #[Validate('required|string')]
+    public string $phone;
+    #[Validate('required|string')]
+    public string $email;
+    #[Validate('nullable|string')]
+    public string $notes;
+    public string $orderFollowUpLink;
+
+    #[On('orderCreated')]
     public function cartItems()
     {
         return session()->get('cart', []);
@@ -16,70 +34,91 @@ new class extends Component {
         }
         return $total;
     }
+    public function createOrder()
+    {
+        $cart = $this->cartItems();
+        $orderData = $this->validate();
+        $orderData['order_number'] = $this->createOrderNumber();
+        $orderData['total'] = $this->totalPrice();
+        // create the order
+        // dd($orderData);
+        $order = Order::create($orderData);
+        // create order items
+        foreach ($cart as $cartItem) {
+            $product = Product::whereId($cartItem['id'])->first();
+            $order->orderItems()->create([
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'sku' => $product->sku,
+                'quantity' => $cartItem['quantity'],
+                'total' => $cartItem['quantity'] * $cartItem['price'],
+            ]);
+        }
+        $this->reset();
+        $this->dispatch('orderCreated', message: "Order has been created with order number: " . $order->order_mumber);
+
+        session()->forget('cart');
+    }
+    public function createOrderNumber()
+    {
+        $rand = Str::upper(Str::random(10));
+        return Order::whereOrderNumber($rand)->exists() ? Str::upper(Str::random(10)) : $rand;
+    }
 };
 ?>
 
 <div class="container-fluid bg-light overflow-hidden py-5">
     <div class="container py-5">
         <h1 class="mb-4 wow fadeInUp" data-wow-delay="0.1s">Billing details</h1>
-        <form action="#">
+        <form wire:submit.prevent="createOrder()">
             <div class="row g-5">
                 <div class="col-md-12 col-lg-6 col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-6">
-                            <div class="form-item w-100">
-                                <label class="form-label my-3">First Name<sup>*</sup></label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-6">
-                            <div class="form-item w-100">
-                                <label class="form-label my-3">Last Name<sup>*</sup></label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Company Name<sup>*</sup></label>
-                        <input type="text" class="form-control">
-                    </div>
+
                     <div class="form-item">
                         <label class="form-label my-3">Address <sup>*</sup></label>
-                        <input type="text" class="form-control" placeholder="House Number Street Name">
+                        <input type="text" class="form-control" wire:model="address"
+                            placeholder="House Number Street Name">
+                        @error('address')
+                        <p class="help-text text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Town/City<sup>*</sup></label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" wire:model="town">
+                        @error('town')
+                        <p class="help-text text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="form-item">
-                        <label class="form-label my-3">Country<sup>*</sup></label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-item">
-                        <label class="form-label my-3">Mobile<sup>*</sup></label>
-                        <input type="tel" class="form-control">
+                        <label class="form-label my-3">Phone<sup>*</sup></label>
+                        <input type="tel" class="form-control" wire:model="phone">
+                        @error('phone')
+                        <p class="help-text text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="form-item">
                         <label class="form-label my-3">Email Address<sup>*</sup></label>
-                        <input type="email" class="form-control">
+                        <input type="email" class="form-control" wire:model="email">
+                        @error('email')
+                        <p class="help-text text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     {{-- <div class="form-check my-3">
                         <input type="checkbox" class="form-check-input" id="Account-1" name="Accounts" value="Accounts">
                         <label class="form-check-label" for="Account-1">Create an account?</label>
                     </div> --}}
                     <hr>
-                    {{-- 
+                    {{--
                     <div class="form-check my-3">
                         <input class="form-check-input" type="checkbox" id="Address-1" name="Address" value="Address">
                         <label class="form-check-label" for="Address-1">Ship to a different address?</label>
                     </div> --}}
                     <div class="form-item">
-                        <textarea name="text" class="form-control" spellcheck="false" cols="30" rows="11"
+                        <textarea name="text" class="form-control" wire:model="notes" spellcheck="false" cols="30" rows="11"
                             placeholder="Order Notes (Optional)"></textarea>
+                        @error('notes')
+                        <p class="help-text text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-6 col-xl-6 wow fadeInUp" data-wow-delay="0.3s">
@@ -96,25 +135,26 @@ new class extends Component {
                             </thead>
                             <tbody>
                                 @forelse ($this->cartItems() as $item)
-                                    <tr class="text-center">
-                                        <th scope="row" class="text-start py-4">
-                                            <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}"
-                                                class="img-fluid rounded" style="width: 60px; height: 60px;">
-                                        </th>
-                                        <td class="py-4 text-start">{{ $item['name'] }}</td>
-                                        <td class="py-4">Kshs. {{ number_format($item['price'], 2) }}</td>
-                                        <td class="py-4 text-center">{{ $item['quantity'] }}</td>
-                                        <td class="py-4">Kshs.
-                                            {{ number_format($item['price'] * $item['quantity'], 2) }}
-                                        </td>
-                                    </tr>
+                                <tr class="text-center">
+                                    <th scope="row" class="text-start py-4">
+                                        <img src="{{ asset('storage/' . $item['image']) }}"
+                                            alt="{{ $item['name'] }}" class="img-fluid rounded"
+                                            style="width: 60px; height: 60px;">
+                                    </th>
+                                    <td class="py-4 text-start">{{ $item['name'] }}</td>
+                                    <td class="py-4">Kshs. {{ number_format($item['price'], 2) }}</td>
+                                    <td class="py-4 text-center">{{ $item['quantity'] }}</td>
+                                    <td class="py-4">Kshs.
+                                        {{ number_format($item['price'] * $item['quantity'], 2) }}
+                                    </td>
+                                </tr>
 
                                 @empty
-                                    <tr class="text-center">
-                                        <td colspan="5" class="text-center py-4 justify-content-between">Your cart is
-                                            empty.
-                                        </td>
-                                    </tr>
+                                <tr class="text-center">
+                                    <td colspan="5" class="text-center py-4 justify-content-between">Your cart is
+                                        empty.
+                                    </td>
+                                </tr>
                                 @endforelse
 
 
@@ -128,7 +168,8 @@ new class extends Component {
                                     </td>
                                     <td class="py-4">
                                         <div class="py-2 text-center border-bottom border-top">
-                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}</p>
+                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}
+                                            </p>
                                         </div>
                                     </td>
                                 </tr>
@@ -142,7 +183,8 @@ new class extends Component {
                                     <td class="py-4"></td>
                                     <td class="py-4">
                                         <div class="py-2 text-center border-bottom border-top">
-                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}</p>
+                                            <p class="mb-0 text-dark">Kshs.{{ number_format($this->totalPrice(), 2) }}
+                                            </p>
                                         </div>
                                     </td>
                                 </tr>
@@ -150,7 +192,7 @@ new class extends Component {
                         </table>
                     </div>
                     <div class="row g-4 text-center align-items-center justify-content-center pt-4">
-                        <button type="button"
+                        <button type="submit"
                             class="btn btn-primary border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
                             Order</button>
                     </div>
